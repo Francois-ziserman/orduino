@@ -24,7 +24,7 @@ public:
   unsigned short getAt(unsigned index) {
     if (index >= RAM_SIZE + RAM_IN_EPROM_SIZE) {
       error->setOn("ram adr %03X inv.", index);
-      Log.error("Ram::get - Invalid Address : %s", X4(index));
+      Log.error(F("Ram::get - Invalid Address : %s"), X4(index));
       return 0;
     }
     if (index >= RAM_SIZE) {
@@ -32,7 +32,7 @@ public:
       unsigned right = EEPROM.read(index - RAM_SIZE + RAM_EPROM_START + RAM_IN_EPROM_SIZE);
       return left * 0x100 + right;
     }
-    //Log.verbose("  Ram::get(%s) -> %s" CR, X4(index), X4(memory[index]));
+    //Log.verbose(F("  Ram::get(%s) -> %s" CR), X4(index), X4(memory[index]));
     return memory[index];
   }
 
@@ -49,11 +49,11 @@ public:
       return;
     }
     memory[index] = value;
-    //Log.verbose("  Ram::set(%s, %s) -> %s" CR, X4(index), X4(value), X4(memory[index]));
+    //Log.verbose(F("  Ram::set(%s, %s) -> %s" CR), X4(index), X4(value), X4(memory[index]));
   }
 
   void erase() {
-    Log.notice("Erase RAM" CR);
+    Log.notice(F("Erase RAM" CR));
     for(unsigned i = 0; i < RAM_SIZE; i++) {
       setAt(i, 0);
     }

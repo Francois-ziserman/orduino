@@ -30,10 +30,10 @@ public:
       if (key == KEY_SWITCH_MODE) {
         runMode = !runMode;
         if (runMode) {
-          Log.notice("SWITCH TO EXEC MODE" CR);
+          Log.notice(F("SWITCH TO EXEC MODE" CR));
           program->startRunMode();
         } else {
-          Log.notice("SWITCH TO EDIT MODE" CR);
+          Log.notice(F("SWITCH TO EDIT MODE" CR));
           editor->updateDisplay();
         }
       } else if (runMode) {
@@ -48,7 +48,7 @@ private:
   void receiveFromSerial() {
     if (Serial.available() == 0)
       return;
-    Log.notice("Start receiving" CR);
+    Log.notice(F("Start receiving" CR));
     byte incoming[6] = {0, 0, 0, 0, 0, 0};
     byte col = 0;
     while (Serial.available() > 0) {
@@ -60,7 +60,7 @@ private:
       }
       if ((incomingChar >= 0x30 && incomingChar <= 0x39) || (incomingChar >= 0x41 && incomingChar <= 0x46)) {
         incoming[col] = incomingChar >= 0x30 && incomingChar <= 0x39 ? incomingChar - 0x30 : incomingChar - 0x41 + 0x10;
-        Log.notice("  received %s in col %i" CR, X4(incoming[col]), col);
+        Log.notice(F("  received %s in col %i" CR), X4(incoming[col]), col);
         col++;
         if (col == 6) {
           editor->setFromSerial(incoming);

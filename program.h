@@ -46,7 +46,7 @@ public:
     switch (key) {
     case KEY_STEP_BY_STEP:
       stepByStep = !stepByStep;
-      Log.notice(stepByStep ? "Switch to Step by Step mode" CR : "Switch to Normal mode" CR);
+      Log.notice(stepByStep ? F("Switch to Step by Step mode" CR) : F("Switch to Normal mode" CR));
       updateDisplay();
       break;
     case KEY_DUMP_PRG_TO_SERIAL:
@@ -65,7 +65,7 @@ public:
         isRunning = false;
       } else { // KEY_RUN_STOP && not stepByStep
         isRunning = !isRunning;
-        Log.notice(isRunning ? "RUN" CR : "STOP" CR);
+        Log.notice(isRunning ? F("RUN" CR) : F("STOP" CR));
         if (isRunning) {
           if (screenIsOn) {
             displayScreen();
@@ -76,7 +76,7 @@ public:
       }
       break;
     case KEY_RESET:
-      Log.notice("RESET" CR);
+      Log.notice(F("RESET" CR));
       isRunning = false;
       setScreenMode(false);
       indexExec = 0;
@@ -123,9 +123,9 @@ public:
       return;
     Instr instr = instructions->get(indexExec);
     if (instr.withParam()) {
-      Log.trace("execute line %s : %s --> %s(%s)" CR, X4(indexExec+1), X4(instr.action), instr.getActionAsStr().c_str(), X4(instr.parameter)); 
+      Log.trace(F("execute line %s : %s --> %s(%s)" CR), X4(indexExec+1), X4(instr.action), instr.getActionAsStr().c_str(), X4(instr.parameter)); 
     } else {
-     Log.trace("execute line %s : %s --> %s" CR, X4(indexExec+1), X4(instr.action), instr.getActionAsStr().c_str());       
+     Log.trace(F("execute line %s : %s --> %s" CR), X4(indexExec+1), X4(instr.action), instr.getActionAsStr().c_str());       
     }
     
     bool update = false;
@@ -239,52 +239,52 @@ public:
         if (ra == rb) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JEQ_AB %s %s" CR, (ra == rb ? "jmp" : "nop"), X4(indexExec+1)); 
+        Log.trace(F("  --> JEQ_AB %s %s" CR), (ra == rb ? "jmp" : "nop"), X4(indexExec+1)); 
         update = true;
         break;
       case I_JNEQ_AB:
         if (ra != rb) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JNEQ_AB %s %s" CR, (ra != rb ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JNEQ_AB %s %s" CR), (ra != rb ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JEQ_AC:
         if (ra == rc) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JEQ_AC %s %s" CR, (ra == rc ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JEQ_AC %s %s" CR), (ra == rc ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JNEQ_AC:
         if (ra != rc) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JNEQ_AC %s %s" CR, (ra != rc ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JNEQ_AC %s %s" CR), (ra != rc ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JEQ_BC:
         if (rb == rc) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JEQ_BC %s %s" CR, (rb == rc ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JEQ_BC %s %s" CR), (rb == rc ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JNEQ_BC:
         if (rb != rc) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JNEQ_BC %s %s" CR, (rb != rc ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JNEQ_BC %s %s" CR), (rb != rc ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JUMP_RB:
         indexExec = instructions->getLabelAddress(rb);
-        Log.trace("  --> JUMP_RB %s" CR, X4(indexExec+1));
+        Log.trace(F("  --> JUMP_RB %s" CR), X4(indexExec+1));
         update = true;
         break;
       case I_JUMP_ADR_RB:
         indexExec = rb;
-        Log.trace("  --> JUMP_ADR_RB %s" CR, X4(indexExec+1));
+        Log.trace(F("  --> JUMP_ADR_RB %s" CR), X4(indexExec+1));
         update = true;
         break;
       case I_JUMP_SUB:
@@ -314,56 +314,56 @@ public:
         break;
       case I_JUMP:
         indexExec = instructions->getLabelAddress(instr.parameter);
-        Log.trace("  --> JMP %s" CR, X4(indexExec+1));
+        Log.trace(F("  --> JMP %s" CR), X4(indexExec+1));
         update = true;
         break;
       case I_JAZ:
         if (ra == 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JAZ %s %s" CR, (ra == 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JAZ %s %s" CR), (ra == 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JBZ:
         if (rb == 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JBZ %s %s" CR, (rb == 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JBZ %s %s" CR), (rb == 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JCZ:
         if (rc == 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JCZ %s %s" CR, (rc == 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JCZ %s %s" CR), (rc == 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JANZ:
         if (ra != 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JANZ %s %s" CR, (ra != 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JANZ %s %s" CR), (ra != 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JBNZ:
         if (rb != 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JBNZ %s %s" CR, (rb != 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JBNZ %s %s" CR), (rb != 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JCNZ:
         if (rc != 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace("  --> JCZ %s %s" CR, (rc != 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JCZ %s %s" CR), (rc != 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_LABEL:
         update = true;
         break;
       case I_STOP:
-        Log.trace("  --> STOP" CR);
+        Log.trace(F("  --> STOP" CR));
         isRunning = false;
         update = true;
         break;
@@ -481,7 +481,7 @@ public:
         break;
       case I_MOVRR_AB:
         ram->setAt(ra, rb);
-        Log.trace("  --> MOVRR_AB (%s) = %s" CR, X4(ra), X4(rb));
+        Log.trace(F("  --> MOVRR_AB (%s) = %s" CR), X4(ra), X4(rb));
         update = true;
         break;
       case I_RANDOM:
@@ -533,7 +533,7 @@ public:
     updateDisplay();
     
     if (indexExec > instructions->findLastInstrIndex()) {
-      Log.notice("STOP" CR);
+      Log.notice(F("STOP" CR));
       isRunning = false;
     }
   }
@@ -546,24 +546,24 @@ public:
   void insertInstr(unsigned short index) { instructions->insertInstr(index); }
   
   void printToSerial() {
-    Log.notice("ADDRESS" CR);
-    Log.notice("  ram free addresses               : %s - %s" CR, X4(0), X4(stack->getLastAddress()-1));
-    Log.notice("  stack addresses                  : %s - %s" CR, X4(stack->getLastAddress()), X4(stack->getFirstAddress()));  
-    Log.notice("  stack index (size)               : %s (%s)" CR, X4(stack->getIndexAddress()), X4(stack->getIndex()));
-    Log.notice("  keypressed address (value)       : %s (%s)" CR, X4(KEY_ADDRESS), X4(ram->getAt(KEY_ADDRESS)));
-    Log.notice("  screen addresses                 : %s - %s" CR, X4(screen->getFirstAddress()), X4(screen->getLastAddress()));
-    Log.notice("  screen cursor addresses Line Col : %s , %s" CR, X4(SCREEN_RAM_Y), X4(SCREEN_RAM_X));
-    Log.notice("  last ram address                 : %s" CR, X4(RAM_SIZE-1));    
-    Log.notice("  ram in eeprom addresses          : %s - %s" CR, X4(RAM_SIZE), X4(RAM_SIZE + RAM_IN_EPROM_SIZE - 1));    
-    Log.notice("RAM" CR);
+    Log.notice(F("ADDRESS" CR));
+    Log.notice(F("  ram free addresses               : %s - %s" CR), X4(0), X4(stack->getLastAddress()-1));
+    Log.notice(F("  stack addresses                  : %s - %s" CR), X4(stack->getLastAddress()), X4(stack->getFirstAddress()));  
+    Log.notice(F("  stack index (size)               : %s (%s)" CR), X4(stack->getIndexAddress()), X4(stack->getIndex()));
+    Log.notice(F("  keypressed address (value)       : %s (%s)" CR), X4(KEY_ADDRESS), X4(ram->getAt(KEY_ADDRESS)));
+    Log.notice(F("  screen addresses                 : %s - %s" CR), X4(screen->getFirstAddress()), X4(screen->getLastAddress()));
+    Log.notice(F("  screen cursor addresses Line Col : %s , %s" CR), X4(SCREEN_RAM_Y), X4(SCREEN_RAM_X));
+    Log.notice(F("  last ram address                 : %s" CR), X4(RAM_SIZE-1));    
+    Log.notice(F("  ram in eeprom addresses          : %s - %s" CR), X4(RAM_SIZE), X4(RAM_SIZE + RAM_IN_EPROM_SIZE - 1));    
+    Log.notice(F("RAM" CR));
     for (unsigned i = 0; i < RAM_SIZE; i += 16) {
-      Log.notice("  %s:%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s" CR,
+      Log.notice(F("  %s:%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s" CR),
                              X4(i), GETRAMX(i), GETRAMX(i+1), GETRAMX(i+2), GETRAMX(i+3), GETRAMX(i+4), GETRAMX(i+5), 
                              GETRAMX(i+6), GETRAMX(i+7), GETRAMX(i+8), GETRAMX(i+9), GETRAMX(i+10), GETRAMX(i+11), 
                              GETRAMX(i+12), GETRAMX(i+13), GETRAMX(i+14), GETRAMX(i+15));  
     }
-    Log.notice("PROGRAM LISTING STARTING" CR);
-    Log.notice("  LINE INST PARA : INSTR NAME" CR);
+    Log.notice(F("PROGRAM LISTING STARTING" CR));
+    Log.notice(F("  LINE INST PARA : INSTR NAME" CR));
     unsigned nopNbr = 0; // Stop the listing after 2 NOP
     for (unsigned i = 0; i < INSTR_SIZE && nopNbr < 2; i++) {
       Instr instr = getInstr(i); 
@@ -574,13 +574,13 @@ public:
       if (nopNbr == 2)
         break;
       if(instr.withParam())
-        Log.notice("  %s %s %s : %s" CR, X4(i+1), X4(instr.action), X4(instr.parameter), instr.getActionAsStr().c_str());
+        Log.notice(F("  %s %s %s : %s" CR), X4(i+1), X4(instr.action), X4(instr.parameter), instr.getActionAsStr().c_str());
       else
-        Log.notice("  %s %s .... : %s" CR, X4(i+1), X4(instr.action), instr.getActionAsStr().c_str());
+        Log.notice(F("  %s %s .... : %s" CR), X4(i+1), X4(instr.action), instr.getActionAsStr().c_str());
     }
-    Log.notice("PROGRAM LISTING END" CR);
+    Log.notice(F("PROGRAM LISTING END" CR));
     #ifdef MEMORY_FREE_H
-      Log.notice("Free memory in Arduino : %u" CR, freeMemory());
+      Log.notice(F("Free memory in Arduino : %u" CR), freeMemory());
     #endif
   }
 
@@ -610,7 +610,7 @@ private:
 
     if (error->isOn()) {
       lcd->setLine(1, error->getReason());
-      Log.error("%s" CR, error->getReason().c_str());
+      Log.error(F("%s" CR), error->getReason().c_str());
    } else if (indexExec > 0) {
       displayLine(indexExec-1, 1, false);
     }

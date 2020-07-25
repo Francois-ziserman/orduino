@@ -16,7 +16,7 @@ public:
   }
   
   void initDisplay() {
-    Log.verbose("Lcd.initDiaplay" CR);
+    Log.verbose(F("Lcd.initDiaplay" CR));
     for(short i = 0; i < 4; i++) {
       lines[i] = String("                    ");
     }
@@ -33,7 +33,7 @@ public:
   }
 
   void setLine(unsigned short index) {
-    Log.verbose("Lcd.setLine %i '%s'" CR, index, line);
+    Log.verbose(F("Lcd.setLine %i '%s'" CR), index, line);
    lines[index] = String(line);
   }
 
@@ -45,11 +45,11 @@ public:
   }
   
   void display() {
-    Log.verbose("Lcd.diaplay" CR);
+    Log.verbose(F("Lcd.diaplay" CR));
     for(short i = 0; i < 4; i++) {
       _lcd.setCursor(0,i);
       _lcd.print(lines[i]);
-      Log.verbose("  %i: '%s'" CR, i, lines[i].c_str());
+      Log.verbose(F("  %i: '%s'" CR), i, lines[i].c_str());
    }
    behindCursor = lines[cursor_y][cursor_x];
   }

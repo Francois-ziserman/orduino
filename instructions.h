@@ -18,17 +18,17 @@ public:
   }
 
   void erase() {
-    Log.notice("Erase program starting..." CR);
+    Log.notice(F("Erase program starting..." CR));
     unsigned short last = findLastInstrIndex();
     for (short i = 0; i < last+1; i++) {
       setAction(i, 0);
       setParameter(i, 0);
     }
-    Log.notice("Erase program complete" CR);
+    Log.notice(F("Erase program complete" CR));
   }
   
   void compile() {
-    if (logClass) Log.verbose("Compile starting..." CR);
+    if (logClass) Log.verbose(F("Compile starting..." CR));
     for (short i = 0; i < LABEL_SIZE; i++) {
       labels[i] = NO_VALUE;
     }
@@ -38,11 +38,11 @@ public:
         unsigned short id = getParameter(i);
         if (id >= LABEL_SIZE) {
           error->setOn("Label too big");
-          Log.error("label too big line:%s Id:%s" CR, X4(i+1), X4(id));
+          Log.error(F("label too big line:%s Id:%s" CR), X4(i+1), X4(id));
           break;
         }
         labels[id] = i;
-        if (logClass) Log.verbose("   Label line: %s Id:%s" CR, X4(i+1), X4(id));
+        if (logClass) Log.verbose(F("   Label line: %s Id:%s" CR), X4(i+1), X4(id));
       }
     }
   }
@@ -53,19 +53,19 @@ public:
       error->setOn("unknown label %03X", labelIndex);
       return 0;
     }
-    if (logClass) Log.verbose("Label(%s) -> %s" CR, X4(labelIndex), X4(address));
+    if (logClass) Log.verbose(F("Label(%s) -> %s" CR), X4(labelIndex), X4(address));
     return labels[labelIndex];
   }
   
   void set(Instr instr, unsigned short index) {
-    if (logClass) Log.verbose("setInstruction - %2s %s" CR, X4(instr.action), X4(instr.parameter));
+    if (logClass) Log.verbose(F("setInstruction - %2s %s" CR), X4(instr.action), X4(instr.parameter));
     setAction(index, instr.action);
     setParameter(index, instr.parameter);
   }
 
   Instr get(unsigned short index) {    
     Instr instr = Instr(getAction(index), getParameter(index));
-    Log.verbose("Instruction.get Line:%i Action:%i Parameter:%i" CR, index, instr.action, instr.parameter);
+    Log.verbose(F("Instruction.get Line:%i Action:%i Parameter:%i" CR), index, instr.action, instr.parameter);
     return instr;
   }
 
@@ -98,12 +98,12 @@ public:
       } else { // action == 0
         noopNbr++;
         if (noopNbr >= NO_INSTR_BREAK) {
-          if (logClass) Log.verbose("last instr : %s" CR, X4(i-NO_INSTR_BREAK+1));
+          if (logClass) Log.verbose(F("last instr : %s" CR), X4(i-NO_INSTR_BREAK+1));
           return i-NO_INSTR_BREAK; 
         }      
       }  
     }
-    if (logClass) Log.verbose("  last instr : %s CR", X4(INSTR_SIZE-1));
+    if (logClass) Log.verbose(F("  last instr : %s CR"), X4(INSTR_SIZE-1));
     return INSTR_SIZE-1;
   }
 

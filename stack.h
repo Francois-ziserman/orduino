@@ -21,7 +21,7 @@ public:
       return;
     }
     ram->setAt(address-1 - index, value);    
-    Log.trace("  Stack::push at the address %s : %s" CR, X4(address-1 - index), X4(value));
+    Log.trace(F("  Stack::push at the address %s : %s" CR), X4(address-1 - index), X4(value));
   }
   
   unsigned pop() {
@@ -31,7 +31,7 @@ public:
       return 0;
     }
     unsigned ret = ram->getAt(address-1 - index);
-    Log.trace("  Stack::get at the address %s : %s" CR, X4(address-1 - index), X4(ret));
+    Log.trace(F("  Stack::get at the address %s : %s" CR), X4(address-1 - index), X4(ret));
     decrIndex();
     return ret;
   }
@@ -45,14 +45,14 @@ public:
   unsigned getLastAddress() { return address-1-STACK_SIZE; }
 
   unsigned getIndex() {
-    Log.verbose("  Stack::index %s = %s" CR, X4(address), X4(ram->getAt(address))); 
+    Log.verbose(F("  Stack::index %s = %s" CR), X4(address), X4(ram->getAt(address))); 
     return ram->getAt(address);
   }
 
 private:
   void initIndex() {
     ram->setAt(address, 0);
-    Log.verbose("  Stack::init index %s = %s", X4(address), X4(getIndex())); 
+    Log.verbose(F("  Stack::init index %s = %s"), X4(address), X4(getIndex())); 
   }
   
 

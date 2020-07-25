@@ -16,10 +16,10 @@ void setup() {
   Serial.begin(9600);
   randomSeed(analogRead(0));
   Log.begin(LOG_LEVEL_TRACE, &Serial);
-  Log.trace("Starting..." CR);
+  Log.trace(F("Starting..." CR));
   engine = new Engine();
   #ifdef MEMORY_FREE_H
-    Log.notice("Free memory in Arduino : %u" CR, freeMemory());
+    Log.notice(F("Free memory in Arduino : %u" CR), freeMemory());
   #endif
 };
 

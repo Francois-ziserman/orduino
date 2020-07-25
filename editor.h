@@ -108,7 +108,7 @@ public:
   }
 
   void setFromSerial(byte* input) {
-    Log.notice("  Received : %s%s %s%s%s%s" CR, X4(input[0]), X4(input[1]), X4(input[2]), X4(input[3]), X4(input[4]), X4(input[5]));
+    Log.notice(F("  Received : %s%s %s%s%s%s" CR), X4(input[0]), X4(input[1]), X4(input[2]), X4(input[3]), X4(input[4]), X4(input[5]));
   }
   void updateDisplay() {
     Instr instr;  
