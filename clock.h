@@ -49,7 +49,6 @@ public:
       case KEY_HEX_7:
       case KEY_HEX_8:
       case KEY_HEX_9:
-        // TODO enter a number
         setChar(key);
         right();
         break;
