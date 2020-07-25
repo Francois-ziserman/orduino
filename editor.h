@@ -2,6 +2,7 @@
 #define EDITOR_H
 
 #include "error.h"
+#include "clock.h"
 
 #define LINE_SIZE 6
 #define PAGE 4
@@ -9,9 +10,10 @@ const String LINE_DEFAULT_VALUE = "000000";
 
 class Editor {
 public:
-  Editor(Error* e, Lcd* l, Program* p) {
+  Editor(Error* e, Lcd* l, Clock* c, Program* p) {
     error = e;
     lcd = l;
+    clock = c;
     program = p;    
     indexEdit = 1;
     indexColEdit = 0;
@@ -96,6 +98,10 @@ public:
        break;
     case KEY_DUMP_PRG_TO_SERIAL:
       dumpToSerial();
+      break;
+    case KEY_CLOCK_EDIT:
+      clock->edit();
+      change = true;
       break;
     }
     if (key >= KEY_HEX_0 && key <= KEY_HEX_F) {
@@ -189,6 +195,7 @@ private:
   Program* program;
   Lcd* lcd;
   Error* error;
+  Clock* clock;
   boolean modifLine;
   unsigned short indexEdit;
   byte indexColEdit;

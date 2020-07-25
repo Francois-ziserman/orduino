@@ -19,6 +19,7 @@
 #define KEY_DELETE_LINE          'Q'
 #define KEY_INSERT_LINE          'R'
 #define KEY_STEP_BY_STEP         'O'
+#define KEY_CLOCK_EDIT           'O'
 #define KEY_DUMP_PRG_TO_SERIAL   'V'
 #define KEY_ERASE_PROGRAM        'T'
 #define KEY_ERASE_RAM            'U'

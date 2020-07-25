@@ -37,6 +37,11 @@ public:
    lines[index] = String(line);
   }
 
+  void setChar(unsigned short index, unsigned short position, char c) {
+    lines[index][position] = c;
+    behindCursor = lines[cursor_y][cursor_x];
+  }
+
   void setCursor(byte x, byte y) {
     initCursor();
     cursor_x = x;
@@ -72,6 +77,8 @@ public:
     } 
   }
   
+  String getLine(unsigned short index) { return lines[index]; }
+
   char line[21];
   
 private:

@@ -22,8 +22,8 @@ public:
     screen->setCursor();
     while (inputMode) {
       char key = keypad.getKey();
-      if (key == NO_KEY) {
         screen->refreshCursor();
+      if (key == NO_KEY) {
         continue;
       }
       if (key == KEY_ENTER) {
