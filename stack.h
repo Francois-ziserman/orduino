@@ -16,23 +16,42 @@ public:
   }
   
   void push(unsigned value) {
-    int index = incrIndex();
+    incrIndex();
     if (error->isOn()) {
       return;
     }
-    ram->setAt(address-1 - index, value);    
-    Log.trace(F("  Stack::push at the address %s : %s" CR), X4(address-1 - index), X4(value));
+    ram->setAt(getAddress(), value);    
+    Log.trace(F("  Stack::push at the address %s : %s" CR), X4(getAddress()), X4(value));
   }
   
   unsigned pop() {
-    int index = getIndex();
-    if (index <= 0) {
-      error->setOn("Stack empty");
+    if (getIndex() <= 0) {
+      error->setOn(F("Stack empty"));
       return 0;
     }
-    unsigned ret = ram->getAt(address-1 - index);
-    Log.trace(F("  Stack::get at the address %s : %s" CR), X4(address-1 - index), X4(ret));
+    unsigned ret = ram->getAt(getAddress());
+    Log.trace(F("  Stack::get at the address %s : %s" CR), X4(getAddress()), X4(ret));
     decrIndex();
+    return ret;
+  }
+  
+  void subPush(unsigned value) {
+    subIncrIndex();
+    if (error->isOn()) {
+      return;
+    }
+    ram->setAt(subGetAddress(), value);    
+    Log.trace(F("  Stack::push at the address %s : %s" CR), X4(subGetAddress()), X4(value));
+  }
+  
+  unsigned subPop() {
+    if (subGetIndex() <= 0) {
+      error->setOn(F("Stack empty"));
+      return 0;
+    }
+    unsigned ret = ram->getAt(subGetAddress());
+    Log.trace(F("  Stack::get at the address %s : %s" CR), X4(subGetAddress()), X4(ret));
+    subDecrIndex();
     return ret;
   }
   
@@ -40,35 +59,64 @@ public:
     initIndex();
   }
 
-  unsigned getIndexAddress() { return address; }
-  unsigned getFirstAddress() { return address-1; }
-  unsigned getLastAddress() { return address-1-STACK_SIZE; }
-
-  unsigned getIndex() {
-    Log.verbose(F("  Stack::index %s = %s" CR), X4(address), X4(ram->getAt(address))); 
-    return ram->getAt(address);
-  }
-
+  inline unsigned getIndexAddress()    { return address; }
+  inline unsigned subGetIndexAddress() { return address-1; }
+  inline unsigned getTopAddress()      { return address-2; }
+  inline unsigned getBottomAddress()   { return address-2-STACK_SIZE; }
+  inline unsigned getIndex()           { return ram->getAt(getIndexAddress()); }
+  inline unsigned subGetIndex()        { return ram->getAt(subGetIndexAddress()); }
+  inline unsigned getAddress()         { return getTopAddress() - (getIndex() - 1); }
+  inline unsigned subGetAddress()      { return getBottomAddress() + subGetIndex() - 1; };
+  
 private:
   void initIndex() {
-    ram->setAt(address, 0);
-    Log.verbose(F("  Stack::init index %s = %s"), X4(address), X4(getIndex())); 
-  }
-  
+    ram->setAt(getIndexAddress(), 0);
+    ram->setAt(subGetIndexAddress(), 0);
+  } 
 
   int incrIndex() {
     int index = getIndex();
-    if (index >= STACK_SIZE) {
-      error->setOn("Stack overflow:%03x", index);
+    int other = subGetIndex();
+    if (index + other > STACK_SIZE) {
+      error->setOn(F("Stack overflow:%03x"), index);
       return 0;
     }
-    ram->setAt(address, ++index);
+    index++;
+    ram->setAt(address, index);
     return index;
   }
 
   int decrIndex() {
     int index = getIndex();
-    ram->setAt(address, --index);
+    if (index == 0) {
+      error->setOn(F("Stack empty"));
+      return 0;
+    }
+    index--;
+    ram->setAt(address, index);
+    return index;
+  }
+  
+  int subIncrIndex() {
+    int index = subGetIndex();
+    int other = getIndex();
+    if (index + other > STACK_SIZE) {
+      error->setOn(F("Stack overflow:%03x"), index);
+      return 0;
+    }
+    index++;
+    ram->setAt(address-1, index);
+    return index;
+  }
+
+  int subDecrIndex() {
+    int index = subGetIndex();
+    if (index == 0) {
+      error->setOn(F("Stack empty"));
+      return 0;
+    }
+    index--;
+    ram->setAt(address-1, index);
     return index;
   }
   

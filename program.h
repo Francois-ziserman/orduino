@@ -43,6 +43,7 @@ public:
   }
 
   void oneStep(unsigned char key) {
+    ram->setAt(KEY_ADDRESS, key);
     switch (key) {
     case KEY_STEP_BY_STEP:
       stepByStep = !stepByStep;
@@ -108,6 +109,8 @@ public:
       if (indexExec == INSTR_SIZE-1)
         break;
       indexExec = indexExec+PAGE > INSTR_SIZE-1 ? INSTR_SIZE - 1 - PAGE : indexExec + PAGE; 
+      updateDisplay(); 
+      break;
     case KEY_ERASE_RAM:
       if (!isRunning) {
         eraseRam();
@@ -115,7 +118,6 @@ public:
       }
       break;
     }
-    ram->setAt(KEY_ADDRESS, key);
   };
   
   void doOneStep() {
@@ -288,12 +290,12 @@ public:
         update = true;
         break;
       case I_JUMP_SUB:
-        stack->push(indexExec);
+        stack->subPush(indexExec);
         indexExec = instructions->getLabelAddress(instr.parameter);
         update = true;
         break;
       case I_RETURN:
-        indexExec = stack->pop();
+        indexExec = stack->subPop();
         update = true;
         break;
       case I_LSHIFT:
@@ -547,9 +549,10 @@ public:
   
   void printToSerial() {
     Log.notice(F("ADDRESS" CR));
-    Log.notice(F("  ram free addresses               : %s - %s" CR), X4(0), X4(stack->getLastAddress()-1));
-    Log.notice(F("  stack addresses                  : %s - %s" CR), X4(stack->getLastAddress()), X4(stack->getFirstAddress()));  
+    Log.notice(F("  ram free addresses               : %s - %s" CR), X4(0), X4(stack->getBottomAddress()-1));
+    Log.notice(F("  stack addresses                  : %s - %s" CR), X4(stack->getBottomAddress()), X4(stack->getTopAddress()));  
     Log.notice(F("  stack index (size)               : %s (%s)" CR), X4(stack->getIndexAddress()), X4(stack->getIndex()));
+    Log.notice(F("  sub stack index (value)          : %s (%s)" CR), X4(stack->subGetIndexAddress()), X4(stack->subGetIndex()));
     Log.notice(F("  keypressed address (value)       : %s (%s)" CR), X4(KEY_ADDRESS), X4(ram->getAt(KEY_ADDRESS)));
     Log.notice(F("  screen addresses                 : %s - %s" CR), X4(screen->getFirstAddress()), X4(screen->getLastAddress()));
     Log.notice(F("  screen cursor addresses Line Col : %s , %s" CR), X4(SCREEN_RAM_Y), X4(SCREEN_RAM_X));
