@@ -20,7 +20,6 @@ public:
   }
 
   void loop() {
-    receiveFromSerial();
     char key = keypad.getKey();
     if (key == NO_KEY) {
       if (runMode) {
@@ -47,31 +46,7 @@ public:
   };
 
 private:
-  void receiveFromSerial() {
-    if (Serial.available() == 0)
-      return;
-    Log.notice(F("Start receiving" CR));
-    byte incoming[6] = {0, 0, 0, 0, 0, 0};
-    byte col = 0;
-    while (Serial.available() > 0) {
-      char incomingChar = Serial.read();
-      if (incomingChar == 0xA) {
-        editor->setFromSerial(incoming);
-          for (byte i = 0; i < 6; i++) incoming[i] = 0;
-          col = 0;
-      }
-      if ((incomingChar >= 0x30 && incomingChar <= 0x39) || (incomingChar >= 0x41 && incomingChar <= 0x46)) {
-        incoming[col] = incomingChar >= 0x30 && incomingChar <= 0x39 ? incomingChar - 0x30 : incomingChar - 0x41 + 0x10;
-        Log.notice(F("  received %s in col %i" CR), X4(incoming[col]), col);
-        col++;
-        if (col == 6) {
-          editor->setFromSerial(incoming);
-          for (byte i = 0; i < 6; i++) incoming[i] = 0;
-          col = 0;
-        }
-      }      
-    }
-  }
+
   bool runMode; // edit or run
   Error* error;
   Clock* clock;
