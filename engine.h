@@ -4,6 +4,7 @@
 #include "lcd.h"
 #include "error.h"
 #include "clock.h"
+#include "filesystem.h"
 #include "program.h"
 #include "editor.h"
 
@@ -15,7 +16,8 @@ public:
     lcd = new Lcd();
     clock = new Clock(lcd, error);
     program = new Program(error, lcd, clock);
-    editor = new Editor(error, lcd, clock, program);
+    filesystem = new FileSystem(lcd, clock, program);
+    editor = new Editor(error, lcd, clock, filesystem, program);
     editor->updateDisplay();
   }
 
@@ -50,6 +52,7 @@ private:
   bool runMode; // edit or run
   Error* error;
   Clock* clock;
+  FileSystem* filesystem;
   Program* program;
   Editor* editor;
   Lcd* lcd;

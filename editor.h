@@ -10,10 +10,11 @@ const String LINE_DEFAULT_VALUE = "000000";
 
 class Editor {
 public:
-  Editor(Error* e, Lcd* l, Clock* c, Program* p) {
+  Editor(Error* e, Lcd* l, Clock* c, FileSystem* fs, Program* p) {
     error = e;
     lcd = l;
     clock = c;
+    filesystem = fs;
     program = p;    
     indexEdit = 1;
     indexColEdit = 0;
@@ -194,6 +195,7 @@ private:
 
   Program* program;
   Lcd* lcd;
+  FileSystem* filesystem;
   Error* error;
   Clock* clock;
   boolean modifLine;
