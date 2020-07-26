@@ -7,6 +7,7 @@
 #include "input.h"
 #include "stack.h"
 #include "error.h"
+#include "clock.h"
 
 //#include "MemoryFree.h"
 
@@ -17,9 +18,10 @@
 
 class Program {
 public:
-  Program(Error* e, Lcd* l) {
+  Program(Error* e, Lcd* l, Clock* c) {
     error = e;
     lcd = l;
+    clock = c;
     ram = new Ram(error);
     screen = new Screen(ram, lcd);
     stack = new Stack(ram, screen->getFirstAddress()-2, error);
@@ -169,6 +171,14 @@ public:
         ram->setAt(instr.parameter, rc);
         update = true;
         break;
+      case I_MOV_TIME: 
+        setRamWithTime(instr.parameter);
+        update = true;
+        break;
+      case I_MOV_DATE: 
+        setRamWithDate(instr.parameter);
+        update = true;
+        break;
       case I_ADD:
         rc = ra + rb;
         update = true;
@@ -183,7 +193,7 @@ public:
         break;
       case I_DIV:
         if (rb == 0) {
-              error->setOn("DIV BY 0");
+          error->setOn("DIV BY 0");
         } else {
           rc = ra / rb;
         }
@@ -445,6 +455,24 @@ public:
           screen->clear();
         }
         break;
+      case I_DT_PRINT_DATE:
+        if (screenIsOn) {
+          tmElements_t tm = clock->get();
+          if (!error->isOn()) {
+            sprintf(temp, "%02d/%02d/%04d", tm.Day, tm.Month, tmYearToCalendar(tm.Year));
+            screen->print(temp);
+          }
+        }
+        break;
+      case I_DT_PRINT_TIME:
+        if (screenIsOn) {
+          tmElements_t tm = clock->get();
+          if (!error->isOn()) {
+            sprintf(temp, "%02d:%02d:%02d", tm.Hour, tm.Minute, tm.Second);
+            screen->print(temp);
+          }
+        }
+        break;
       case I_STACK_PUSH_A:
         stack->push(ra);
         update = true;
@@ -588,6 +616,24 @@ public:
   }
 
 private:
+  void setRamWithDate(unsigned address) {
+    tmElements_t tm = clock->get();
+    if (error->isOn())
+      return;
+    ram->setAt(address, tmYearToCalendar(tm.Year));
+    ram->setAt(address+1, tm.Month);
+    ram->setAt(address+2, tm.Day);
+  }
+
+  void setRamWithTime(unsigned address) {
+    tmElements_t tm = clock->get();
+    if (error->isOn())
+      return;
+    ram->setAt(address, tm.Hour);
+    ram->setAt(address+1, tm.Minute);
+    ram->setAt(address+2, tm.Second);
+  }
+
   void displayScreen() {
     screen->switchOn();
     screen->updateScreen();
@@ -681,6 +727,7 @@ private:
   Stack* stack;
   Lcd* lcd;
   Error* error;
+  Clock* clock;
   Instructions* instructions;
 };
 

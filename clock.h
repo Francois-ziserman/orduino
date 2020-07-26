@@ -16,6 +16,16 @@ public:
   	error = e;
   }
 
+  inline tmElements_t get() {
+    tmElements_t tm;
+    if (!RTC.read(tm)) {
+      error->setOn(F("Clock Not found"));
+      Log.error(F("Clock not found" CR));
+      return;
+    }
+    return tm;
+  }
+
   void edit() {
     tmElements_t tm;
     if (!RTC.read(tm)) {

@@ -14,7 +14,7 @@ public:
     error = new Error();
     lcd = new Lcd();
     clock = new Clock(lcd, error);
-    program = new Program(error, lcd);
+    program = new Program(error, lcd, clock);
     editor = new Editor(error, lcd, clock, program);
     editor->updateDisplay();
   }
@@ -46,7 +46,7 @@ public:
   };
 
 private:
-
+  
   bool runMode; // edit or run
   Error* error;
   Clock* clock;

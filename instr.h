@@ -19,6 +19,8 @@
 #define I_MOVR_B                0x09
 #define I_MOVR_C                0x0A
 #define I_MOVRR_AB              0x0B
+#define I_MOV_TIME              0x0C
+#define I_MOV_DATE              0x0D
 
 // OPERATION
 
@@ -113,10 +115,14 @@
 #define I_ARD_AREAD             0x76 // read the pin rA & put the value in rC
 #define I_ARD_AWRITE            0x77 // write the pin rA with the value rB
 
+#define I_DT_PRINT_TIME         0x78
+#define I_DT_PRINT_DATE         0x79
+
+
 #define I_LAST                  0x80
 
 // 00  "no op  ", "STOP   ", "MOV A  ", "MOV B  ", "MOV C  ", "MOV VA ", "MOV VB ", "MOV VC ",
-// 08  "MOV RA ", "MOV RB ", "MOV RC ", "MOVRRAB", "--     ", "--     ", "--     ", "--     ",
+// 08  "MOV RA ", "MOV RB ", "MOV RC ", "MOVRRAB", "MOV D A", "MOV T A", "--     ", "--     ",
 const char _instr_00[] PROGMEM = "no op  ";
 const char _instr_01[] PROGMEM = "STOP   ";
 const char _instr_02[] PROGMEM = "MOV A  ";
@@ -129,8 +135,8 @@ const char _instr_08[] PROGMEM = "MOV RA ";
 const char _instr_09[] PROGMEM = "MOV RB ";
 const char _instr_0A[] PROGMEM = "MOV RC ";
 const char _instr_0B[] PROGMEM = "MOVRRAB";
-const char _instr_0C[] PROGMEM = "--     ";
-const char _instr_0D[] PROGMEM = "--     ";
+const char _instr_0C[] PROGMEM = "MOV D A";
+const char _instr_0D[] PROGMEM = "MOV T A";
 const char _instr_0E[] PROGMEM = "--     ";
 const char _instr_0F[] PROGMEM = "--     ";
 
@@ -257,15 +263,14 @@ const char _instr_74[] PROGMEM = "DREAD  ";
 const char _instr_75[] PROGMEM = "DWRITE ";
 const char _instr_76[] PROGMEM = "AREAD  ";
 const char _instr_77[] PROGMEM = "AWRITE ";
-const char _instr_78[] PROGMEM = "--     ";
-const char _instr_79[] PROGMEM = "--     ";
+const char _instr_78[] PROGMEM = "PRT TM ";
+const char _instr_79[] PROGMEM = "PRT DT ";
 const char _instr_7A[] PROGMEM = "--     ";
 const char _instr_7B[] PROGMEM = "--     ";
 const char _instr_7C[] PROGMEM = "--     ";
 const char _instr_7D[] PROGMEM = "--     ";
 const char _instr_7E[] PROGMEM = "--     ";
 const char _instr_7F[] PROGMEM = "--     ";
-
 
 
 const char* const INSTR[] PROGMEM = {
