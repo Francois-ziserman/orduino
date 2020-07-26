@@ -340,6 +340,7 @@ const static bool WITH_PARAM[] PROGMEM = {
 
 // 70   "SLEEP  ", "SLEEP A", "PINMOUT", "PMODINP", "DREAD  ", "DWRITE ", "AREAD  ", "AWRITE ",
 /* 70 */  1, 1, 1, 1, 0, 0, 0, 0,
+/* 78 */  0, 0, 0, 0, 0, 0, 0, 0,
 
 };
 
