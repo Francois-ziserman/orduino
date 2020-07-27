@@ -7,7 +7,10 @@
 #include "log.h"
 #include "error.h"
 
-#define TIME_TO_STR "%02d/%02d/%04d  %02d:%02d:%02d"
+#define DT_TO_STRING "%02d/%02d/%04d  %02d:%02d:%02d"
+
+#define DATE_TO_STRING "%02d/%02d/%04d"
+#define TIME_TO_STRING "%02d:%02d:%02d"
 
 class Clock {
 public:
@@ -36,7 +39,7 @@ public:
 
   	lcd->initDisplay();
   	lcd->setLine(0, F("   CLOCK SETTINGS   "));
-    sprintf(lcd->line, TIME_TO_STR, 
+    sprintf(lcd->line, DT_TO_STRING, 
       tm.Day, tm.Month, tmYearToCalendar(tm.Year), tm.Hour, tm.Minute, tm.Second );
     timeAsStr = lcd->line;
     lcd->setLine(2, timeAsStr);

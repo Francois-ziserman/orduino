@@ -351,13 +351,14 @@ public:
     parameter = 0;
   }
   Instr(String data) {
-    action = getInt(data[0]) * 16 + getInt(data[1]);
-    parameter = getInt(data[2]) * 4096 + getInt(data[3]) * 256 + getInt(data[4]) * 16 + getInt(data[5]); 
+    action = getCharToInt(data[0]) * 16 + getCharToInt(data[1]);
+    parameter = getCharToInt(data[2]) * 4096 + getCharToInt(data[3]) * 256 + getCharToInt(data[4]) * 16 + getCharToInt(data[5]); 
   }
   Instr(byte a, unsigned short p) {
     action = a;
     parameter = p;
   }
+
   String getAsString() {
     char temp[8];
     sprintf(temp, "%02X%04X", action, parameter);
@@ -373,21 +374,52 @@ public:
     return temp; 
   }
 
-  bool withParam() {
-    bool ret = pgm_read_word_near(WITH_PARAM + action);
-    return ret; //WITH_PARAM[action];  
+  inline String getParamAsString() {
+    return getAsString().substring(2, 6);
+  }
+
+  String getForFile() {
+    if (withParam()) {
+      String ret = getActionAsStr();
+      ret += ' ';  
+      ret += getParamAsString();
+      return ret;
+    } 
+    return getActionAsStr();
+  }
+
+  inline bool withParam() {
+    return pgm_read_word_near(WITH_PARAM + action);
   }
   
   byte action;
   unsigned parameter;
 private:
-  unsigned getInt(char letter) {
-    if (letter >= '0' && letter <= '9')
-      return letter - '0';
-   if (letter >= 'a' && letter <= 'z')
-     return letter - 'a' + 10;
-   return letter - 'A' + 10;
-  }
 };
+
+byte getActionFromStr(String line) {
+  for (byte i = 0; i < I_LAST; i++) {
+    Instr instr(i, 0);
+    if (instr.getActionAsStr() == line) {
+      return instr.action;
+    }
+  }
+  Log.error(F("Instruction not found : '%s'"), line.c_str() );
+  return 0;
+}
+
+Instr createInstrFromFile(String line) {
+  String saction = line.substring(0, 7);
+  byte action = getActionFromStr(saction);
+  String sparameter = "0000"; 
+  if (line.length() > 7) {
+    sparameter = line.substring(8, 12);
+  }
+  char temp[7];
+  sprintf(temp, "%02X%s", action, sparameter.c_str());
+  Log.verbose(F("Create instr : '%s' --> %s-%s --> '%s'" CR), line.c_str(), saction.c_str(), sparameter.c_str(),String(temp).c_str());
+  return Instr(String(temp));
+}
+
 
 #endif

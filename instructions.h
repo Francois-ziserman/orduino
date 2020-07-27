@@ -70,7 +70,7 @@ public:
   }
 
   void deleteInstr(unsigned short index) {
-    unsigned short last = findLastInstrIndex();
+    unsigned short last = findLastInstrIndex(index);
     for (unsigned short i = index; i < last+1; i++) {
       setAction(i, getAction(i+1));
       setParameter(i, getParameter(i+1));
@@ -92,6 +92,24 @@ public:
   unsigned short findLastInstrIndex() {
     unsigned noopNbr = 0;
     for (unsigned short i = 0; i < INSTR_SIZE; i++) {
+      byte action = getAction(i);
+      if (action != 0) {
+        noopNbr = 0;
+      } else { // action == 0
+        noopNbr++;
+        if (noopNbr >= NO_INSTR_BREAK) {
+          if (logClass) Log.verbose(F("last instr : %s" CR), X4(i-NO_INSTR_BREAK+1));
+          return i-NO_INSTR_BREAK; 
+        }      
+      }  
+    }
+    if (logClass) Log.verbose(F("  last instr : %s CR"), X4(INSTR_SIZE-1));
+    return INSTR_SIZE-1;
+  }
+
+  unsigned short findLastInstrIndex(unsigned short from) {
+    unsigned noopNbr = 0;
+    for (unsigned short i = from; i < INSTR_SIZE; i++) {
       byte action = getAction(i);
       if (action != 0) {
         noopNbr = 0;

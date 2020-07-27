@@ -570,10 +570,11 @@ public:
 
   void eraseProgram() { instructions->erase(); }
   void eraseRam() { ram->erase(); }
-  void setInstr(Instr instr, unsigned short index) { instructions->set(instr, index); }
-  Instr getInstr(unsigned short index) { return instructions->get(index); }
-  void deleteInstr(unsigned short index) { instructions->deleteInstr(index); }
-  void insertInstr(unsigned short index) { instructions->insertInstr(index); }
+  inline void setInstr(Instr instr, unsigned short index) { instructions->set(instr, index); }
+  inline Instr getInstr(unsigned short index) { return instructions->get(index); }
+  inline void deleteInstr(unsigned short index) { instructions->deleteInstr(index); }
+  inline void insertInstr(unsigned short index) { instructions->insertInstr(index); }
+  inline unsigned lastInstrIndex() { return instructions->findLastInstrIndex(); }
   
   void printToSerial() {
     Log.notice(F("ADDRESS" CR));

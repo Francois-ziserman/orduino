@@ -34,10 +34,11 @@ public:
         runMode = !runMode;
         if (runMode) {
           Log.notice(F("SWITCH TO EXEC MODE" CR));
+          editor->quit();
           program->startRunMode();
         } else {
           Log.notice(F("SWITCH TO EDIT MODE" CR));
-          editor->updateDisplay();
+          editor->enter();
         }
       } else if (runMode) {
         program->oneStep(key);

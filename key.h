@@ -8,7 +8,9 @@
 
 #define KEY_SWITCH_MODE          'G'
 #define KEY_RUN_STOP             'K'
+#define KEY_SWITCH_EDIT_FILE     'K'
 #define KEY_RESET                'S'
+#define KEY_FILE_COPY            'S'
 #define KEY_LINE_UP              'I'
 #define KEY_LINE_DOWN            'M'
 #define KEY_PAGE_UP              'H'
@@ -18,10 +20,12 @@
 #define KEY_ENTER                'P'
 #define KEY_DELETE_LINE          'Q'
 #define KEY_INSERT_LINE          'R'
+#define KEY_FILE_RENAME          'R'
 #define KEY_STEP_BY_STEP         'O'
 #define KEY_CLOCK_EDIT           'O'
 #define KEY_DUMP_PRG_TO_SERIAL   'V'
 #define KEY_ERASE_PROGRAM        'T'
+#define KEY_FILE_LOAD            'T'
 #define KEY_ERASE_RAM            'U'
                                  
 #define KEY_HEX_0                '0'
@@ -58,5 +62,13 @@ const byte _colPins[KEY_COLS] = {44, 42, 40, 38};
 const byte _rowPins[KEY_ROWS] = {36, 34, 32, 30, 28, 26, 24, 22};
 
 Keypad keypad = Keypad( makeKeymap(_keys), _rowPins, _colPins, KEY_ROWS, KEY_COLS );
+
+unsigned getCharToInt(char letter) {
+  if (letter >= '0' && letter <= '9')
+    return letter - '0';
+ if (letter >= 'a' && letter <= 'z')
+   return letter - 'a' + 10;
+ return letter - 'A' + 10;
+}
 
 #endif

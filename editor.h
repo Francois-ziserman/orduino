@@ -21,6 +21,12 @@ public:
     currentInstrAsStr = LINE_DEFAULT_VALUE;
     currentInstrAsStr = program->getInstr(indexEdit).getAsString();
     modifLine = false;
+    modify = false;
+  }
+
+  void enter() {
+    modify = false;
+    updateDisplay();
   }
 
   void edit(unsigned char key) {
@@ -81,12 +87,14 @@ public:
       currentInstrAsStr = program->getInstr(indexEdit).getAsString();
       modifLine = false;
       change = true;
+      modify = true;
       break;
     case KEY_INSERT_LINE:
       program->insertInstr(indexEdit);
       currentInstrAsStr = program->getInstr(indexEdit).getAsString();
       modifLine = false;
       change = true;
+      modify = true;
       break;
     case KEY_ERASE_PROGRAM:
       program->eraseProgram();
@@ -94,6 +102,7 @@ public:
       currentInstrAsStr = program->getInstr(indexEdit).getAsString();
       modifLine = false;
       change = true;
+      modify = true;
     case KEY_ERASE_RAM:
        program->eraseRam();
        break;
@@ -102,6 +111,10 @@ public:
       break;
     case KEY_CLOCK_EDIT:
       clock->edit();
+      change = true;
+      break;
+    case KEY_SWITCH_EDIT_FILE:
+      filesystem->enter();
       change = true;
       break;
     }
@@ -114,9 +127,13 @@ public:
     } 
   }
 
-  void setFromSerial(byte* input) {
-    Log.notice(F("  Received : %s%s %s%s%s%s" CR), X4(input[0]), X4(input[1]), X4(input[2]), X4(input[3]), X4(input[4]), X4(input[5]));
+  void quit() {
+    if (modify) {
+      filesystem->saveCurrent();
+      modify = false;
+    }
   }
+
   void updateDisplay() {
     Instr instr;  
 
@@ -180,7 +197,8 @@ private:
     indexEdit++;
     instr = program->getInstr(indexEdit);
     currentInstrAsStr = instr.getAsString();
-    modifLine = false;    
+    modifLine = false;  
+    modify = true; // TODO : could be improved, by checking if yes or not the line is realy modified  
   }
   
   void editInput(unsigned char key) {
@@ -202,6 +220,7 @@ private:
   unsigned short indexEdit;
   byte indexColEdit;
   String currentInstrAsStr;
+  bool modify = false;
 };
 
 #endif
