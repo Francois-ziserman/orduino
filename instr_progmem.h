@@ -27,43 +27,27 @@ const char* const INSTR[] PROGMEM = {
 
 const static bool WITH_PARAM[] PROGMEM = {
 /*        0  1  2  3  4  5  6  7  */
-
-// 00  "no op  ", "STOP   ", "MOV A  ", "MOV B  ", "MOV C  ", "MOV VA ", "MOV VB ", "MOV VC ",
-// 08  "MOV RA ", "MOV RB ", "MOV RC ", "MOVRRAB", "--     ", "--     ", "--     ", "--     ",
 /* 00 */  0, 0, 1, 1, 1, 1, 1, 1,
 /* 08 */  1, 1, 1, 0, 0, 0, 0, 0,
 
-// 10   "ADD    ", "MINUS  ", "MULT   ", "DIV    ", "A++    ", "B++    ", "C++    ", "A--    ",
-// 18   "B--    ", "C--    ", "INV A  ", "INV B  ", "INV C  ", "--     ", "--     ", "--     ",
 /* 10 */  0, 0, 0, 0, 0, 0, 0, 0,
 /* 18 */  0, 0, 0, 0, 0, 0, 0, 0,
 
-// 20   "LABEL  ", "JUMP   ", "JMP A Z", "JMP B Z", "JMP C Z", "JMP A!Z", "JMP B!Z", "JMP C!Z",
-// 28   "JMP A=B", "JMP A!B", "JMP A=C", "JMP A!C", "JMP B=C", "JMP_B!C", "JMP  RA", "JMP ADA",
 /* 20 */  1, 1, 1, 1, 1, 1, 1, 1,
 /* 28 */  1, 1, 1, 1, 1, 1, 0, 0,
 
-// 30   "JMP SUB", "RETURN ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
-// 38   "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
 /* 30 */  1, 0, 0, 0, 0, 0, 0, 1,
 /* 38 */  1, 0, 0, 0, 0, 0, 0, 1,
 
-// 40   "SCR ON ", "SCR OFF", "SCR CLR", "SCR NL ", "INPUT A", "INPUT B", "INPUT C", "INPUT M",
-// 48   "PRT A  ", "PRT B  ", "PRT C  ", "PRT M  ", "PRTCH  ", "PRTCH A", "PRTCH M", "--     ",
 /* 40 */  0, 0, 0, 0, 0, 0, 0, 1,
 /* 48 */  0, 0, 0, 1, 1, 0, 1, 0,
 
-// 50   "SW C A ", "SW C B ", "SW A B ", "LSHIFT ", "RSHIFT ", "AND    ", "OR     ", "RND    ",
-// 58   "RND A  ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
 /* 50 */  0, 0, 0, 0, 0, 0, 0, 1,
 /* 58 */  0, 0, 0, 0, 0, 0, 0, 0,
 
-// 60   "ST INIT", "PUSH A ", "PUSH B ", "PUSH C ", "PUSH M ", "POP A  ", "POP B  ", "POP C  ",
-// 68   "POP M  ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
 /* 60 */  0, 0, 0, 0, 1, 0, 0, 0,
 /* 68 */  1, 0, 0, 0, 0, 0, 0, 0,
 
-// 70   "SLEEP  ", "SLEEP A", "PINMOUT", "PMODINP", "DREAD  ", "DWRITE ", "AREAD  ", "AWRITE ",
 /* 70 */  1, 1, 1, 1, 0, 0, 0, 0,
 /* 78 */  0, 0, 0, 0, 0, 0, 0, 0,
 

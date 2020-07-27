@@ -39,9 +39,9 @@ public:
 
   	lcd->initDisplay();
   	lcd->setLine(0, F("   CLOCK SETTINGS   "));
-    sprintf(lcd->line, DT_TO_STRING, 
+    sprintf(temp, DT_TO_STRING, 
       tm.Day, tm.Month, tmYearToCalendar(tm.Year), tm.Hour, tm.Minute, tm.Second );
-    timeAsStr = lcd->line;
+    timeAsStr = temp;
     lcd->setLine(2, timeAsStr);
     lcd->setCursor(0, 2);
     position = 0;

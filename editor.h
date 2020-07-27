@@ -147,12 +147,12 @@ public:
     // LINE 1 : edit line
     instr = Instr(currentInstrAsStr);
     if (instr.withParam())
-      sprintf(lcd->line, "%03X%s%c%c %c%c%c%c: %s", indexEdit+1, (modifLine ? "#" : " "), currentInstrAsStr[0], currentInstrAsStr[1], 
+      sprintf(temp, "%03X%s%c%c %c%c%c%c: %s", indexEdit+1, (modifLine ? "#" : " "), currentInstrAsStr[0], currentInstrAsStr[1], 
         currentInstrAsStr[2], currentInstrAsStr[3], currentInstrAsStr[4], currentInstrAsStr[5], instr.getActionAsStr().c_str());
     else 
-      sprintf(lcd->line, "%03X%s%c%c ....: %s", indexEdit+1, (modifLine ? "#" : " "), currentInstrAsStr[0], currentInstrAsStr[1], instr.getActionAsStr().c_str());
+      sprintf(temp, "%03X%s%c%c ....: %s", indexEdit+1, (modifLine ? "#" : " "), currentInstrAsStr[0], currentInstrAsStr[1], instr.getActionAsStr().c_str());
     
-    lcd->setLine(1);
+    lcd->setLine(1, String(temp));
 
     // LINE 2 & 3
     if (indexEdit+1 < INSTR_SIZE) 
@@ -173,11 +173,11 @@ private:
   void updateLine(unsigned index, byte lineIndex) {
       Instr instr = program->getInstr(index); 
       if (instr.withParam())
-        sprintf(lcd->line, "%03X %02X %04X: %s", index+1, instr.action, instr.parameter, instr.getActionAsStr().c_str());
+        sprintf(temp, "%03X %02X %04X: %s", index+1, instr.action, instr.parameter, instr.getActionAsStr().c_str());
       else 
-        sprintf(lcd->line, "%03X %02X ....: %s", index+1, instr.action, instr.getActionAsStr().c_str());
+        sprintf(temp, "%03X %02X ....: %s", index+1, instr.action, instr.getActionAsStr().c_str());
       
-      lcd->setLine(lineIndex);
+      lcd->setLine(lineIndex, String(temp));
   }
   void dumpToSerial() {
     program->printToSerial();

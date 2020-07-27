@@ -654,8 +654,8 @@ private:
     lcd->initDisplay();
 
     // LINE 0
-    sprintf(lcd->line, "%s A:%03X B:%03X C:%03X ", getRunState().c_str(), ra, rb, rc);
-    lcd->setLine(0);
+    sprintf(temp, "%s A:%03X B:%03X C:%03X ", getRunState().c_str(), ra, rb, rc);
+    lcd->setLine(0, String(temp));
 
     if (error->isOn()) {
       lcd->setLine(1, error->getReason());
@@ -702,12 +702,12 @@ private:
   void displayLine(unsigned short index, unsigned short displayLine, bool current) {
     Instr instr = getInstr(index);
     if (instr.withParam())
-      sprintf(lcd->line, "%s%03X %02X %04X:%s", (current ? ">" : " "),
+      sprintf(temp, "%s%03X %02X %04X:%s", (current ? ">" : " "),
         index+1, instr.action, instr.parameter, instr.getActionAsStr().c_str());
     else
-      sprintf(lcd->line, "%s%03X %02X ....:%s", (current ? ">" : " "),
+      sprintf(temp, "%s%03X %02X ....:%s", (current ? ">" : " "),
         index+1, instr.action, instr.getActionAsStr().c_str());
-    lcd->setLine(displayLine);
+    lcd->setLine(displayLine, String(temp));
   }
 
   void initRegisters() {

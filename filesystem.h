@@ -192,9 +192,8 @@ private:
 
   void displayOneFile(File file, unsigned index) {
     Log.verbose(F("displayOneFile(%s, %i)" CR), file.name(), index);
-    sprintf(lcd->line, "%s %s", (index == 0 ? "#" : " "), file.name());
-    String line(lcd->line);
-    lcd->setLine(index, line);
+    sprintf(temp, "%s %s", (index == 0 ? "#" : " "), file.name());
+    lcd->setLine(index, String(temp));
   }
 
   int getProgramNbr() {

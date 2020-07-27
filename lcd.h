@@ -34,12 +34,7 @@ public:
   void initLine(unsigned short index) {
     lines[index] = String("                    ");
   }
-
-  void setLine(unsigned short index) {
-    Log.verbose(F("Lcd.setLine %i '%s'" CR), index, line);
-   lines[index] = String(line);
-  }
-
+  
   void setChar(unsigned short index, unsigned short position, char c) {
     lines[index][position] = c;
     behindCursor = lines[cursor_y][cursor_x];
@@ -65,7 +60,7 @@ public:
     setCursor(0, 0);
     setLine(0, title);
     setLine(1, message);
-    setLine(3, "Press enter");
+    setLine(3, F("Press enter"));
     display();
     while(true) 
       if (keypad.getKey() == KEY_ENTER)
@@ -137,9 +132,7 @@ public:
     } 
   }
   
-  String getLine(unsigned short index) { return lines[index]; }
-
-  char line[21];
+  inline String getLine(unsigned short index) { return lines[index]; }
   
 private:
   void initCursor() {
