@@ -20,7 +20,7 @@ public:
     on = true;
     reason = r;
     while (reason.length() < 20)
-      reason += " ";
+      reason += ' ';
   }
 
   void init() {

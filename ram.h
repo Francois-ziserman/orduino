@@ -23,7 +23,7 @@ public:
   
   unsigned short getAt(unsigned index) {
     if (index >= RAM_SIZE + RAM_IN_EPROM_SIZE) {
-      error->setOn(("ram adr %03X inv."), index);
+      error->setOn(F("ram adr %03X inv."), index);
       Log.error(F("Ram::get - Invalid Address : %s"), X4(index));
       return 0;
     }
@@ -38,7 +38,7 @@ public:
 
   void setAt(unsigned index, unsigned value) {
     if (index >= RAM_SIZE + RAM_IN_EPROM_SIZE) {
-      error->setOn(("ram adr %03X inv."), index);
+      error->setOn(F("ram adr %03X inv."), index);
       return;
     }
     if (index >= RAM_SIZE) {
