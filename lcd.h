@@ -19,7 +19,7 @@ public:
   void initDisplay() {
     Log.verbose(F("Lcd.initDiaplay" CR));
     for(short i = 0; i < 4; i++) {
-      lines[i] = String("                    ");
+      lines[i] = F("                    ");
     }
     blink = 0;    
     behindCursor = lines[cursor_y][cursor_x];
@@ -32,9 +32,9 @@ public:
   }
 
   void initLine(unsigned short index) {
-    lines[index] = String("                    ");
+    lines[index] = F("                    ");
   }
-  
+
   void setChar(unsigned short index, unsigned short position, char c) {
     lines[index][position] = c;
     behindCursor = lines[cursor_y][cursor_x];
