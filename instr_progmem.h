@@ -55,7 +55,7 @@ const static bool WITH_PARAM[] PROGMEM = {
 
 // 50   "SW C A ", "SW C B ", "SW A B ", "LSHIFT ", "RSHIFT ", "AND    ", "OR     ", "RND    ",
 // 58   "RND A  ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
-/* 50 */  0, 0, 0, 1, 1, 0, 0, 1,
+/* 50 */  0, 0, 0, 0, 0, 0, 0, 1,
 /* 58 */  0, 0, 0, 0, 0, 0, 0, 0,
 
 // 60   "ST INIT", "PUSH A ", "PUSH B ", "PUSH C ", "PUSH M ", "POP A  ", "POP B  ", "POP C  ",

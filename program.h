@@ -308,11 +308,11 @@ public:
         update = true;
         break;
       case I_LSHIFT:
-        rc = rc << instr.parameter;
+        rc = ra << rb;
         update = true;
         break;
       case I_RSHIFT:
-        rc = rc >> instr.parameter;
+        rc = ra >> rb;
         update = true;
         break;
       case I_AND:
