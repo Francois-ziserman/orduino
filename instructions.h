@@ -37,7 +37,7 @@ public:
       if (getAction(i) == I_LABEL) {
         unsigned short id = getParameter(i);
         if (id >= LABEL_SIZE) {
-          error->setOn("Label too big");
+          error->setOn(F("Label too big"));
           Log.error(F("label too big line:%s Id:%s" CR), X4(i+1), X4(id));
           break;
         }
@@ -50,7 +50,7 @@ public:
   unsigned short getLabelAddress(unsigned short labelIndex) {
     unsigned short address = labels[labelIndex];
     if (address == NO_VALUE) {
-      error->setOn("unknown label %03X", labelIndex);
+      error->setOn(F("unknown label %03X"), labelIndex);
       return 0;
     }
     if (logClass) Log.verbose(F("Label(%s) -> %s" CR), X4(labelIndex), X4(address));

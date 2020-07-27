@@ -25,7 +25,6 @@ public:
   }
 
   String getAsString() {
-    char temp[8];
     sprintf(temp, "%02X%04X", action, parameter);
     return String(temp);
   }
@@ -33,8 +32,6 @@ public:
   String getActionAsStr() {
     if (action >= I_LAST)
       return "(error)";
-      
-    char temp[8];
     strcpy_P(temp, (char*)pgm_read_word(&(INSTR[action])));
     return temp; 
   }
@@ -108,7 +105,6 @@ Instr createInstrFromFile(String line) {
   String saction = splitLeft(line);
   byte action = getActionFromStr(saction);
   String sparameter = splitRight(line);
-  char temp[8];
   sprintf(temp, "%02X%s", action, sparameter.c_str());
   Log.verbose(F("  -> '%s' --> %s-%s --> '%s'" CR), line.c_str(), saction.c_str(), sparameter.c_str(),String(temp).c_str());
   return Instr(String(temp));

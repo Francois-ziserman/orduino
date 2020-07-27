@@ -51,7 +51,6 @@ public:
   }
 
   void printValue(String name, unsigned value) {
-    char temp[21];
     sprintf(temp, "%s : %u", name.c_str(), value);
     print(temp);
   }

@@ -13,7 +13,6 @@ public:
   }
   
   int get() {
-    char temp[21];
     sprintf(temp, "%s : ", name.c_str());
     screen->print(temp);
     String sinput = "";

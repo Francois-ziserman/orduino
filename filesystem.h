@@ -33,18 +33,7 @@ public:
 
     pinMode(PIN_CS, OUTPUT);
     pinMode(10, OUTPUT);
-    if (!SD.begin(10)) {
-      Log.error(F("SD card initialization failed" CR));
-      isOk = false;
-      return;
-    }
-    Log.notice(F("SD is ready to use" CR));
-    SdFile::dateTimeCallback(dateTime);
-
-    if (!SD.exists(F("PRGM"))) {
-      Log.notice(F("SD : PRGM default dir doesn't exist --> create it" CR));
-      SD.mkdir(F("PRGM"));
-    }
+    init();
   }
 
   void saveCurrent() {
@@ -66,6 +55,7 @@ public:
 
   void enter() {
     Log.notice(F("ENTER IN FILE MODE..." CR));
+    init();
     displayFiles();
     while(true) {
       char key = keypad.getKey();
@@ -101,6 +91,21 @@ public:
   }
 
 private:
+  void init() {
+    if (!SD.begin(10)) {
+      Log.error(F("SD card initialization failed" CR));
+      isOk = false;
+      return;
+    }
+    Log.verbose(F("SD is ready to use" CR));
+    SdFile::dateTimeCallback(dateTime);
+
+    if (!SD.exists(F("PRGM"))) {
+      Log.notice(F("SD : PRGM default dir doesn't exist --> create it" CR));
+      SD.mkdir(F("PRGM"));
+    }    
+  }
+
   void lineUp() {
     if (currentIndex <= 0)
       return;
@@ -122,7 +127,6 @@ private:
       current.close();
       return;
     }
-    char temp[15];
     sprintf(temp, "/PRGM/%s", current.name());
     current.close();
     String name(temp);
@@ -137,7 +141,6 @@ private:
     String pref = current.name();
     pref = pref.substring(0, 2);
     unsigned i = 1;
-    char temp[10];
     String name;
     while(true) {
       sprintf(temp, "/PRGM/%s%02i.CAR", pref.c_str(), i++);
@@ -168,7 +171,9 @@ private:
     current.close();
   }
 
-  void load() { read(currentIndex); }
+  void load() { 
+    read(currentIndex); 
+  }
 
   void displayFiles() {
     Log.verbose(F("displayFiles. currentIndex:%i" CR), currentIndex);

@@ -133,7 +133,6 @@ public:
     }
     
     bool update = false;
-    char temp[21];
     switch (instr.action) {
       case I_MOV_A:
         ra = ram->getAt(instr.parameter);
@@ -193,7 +192,7 @@ public:
         break;
       case I_DIV:
         if (rb == 0) {
-          error->setOn("DIV BY 0");
+          error->setOn(F("DIV BY 0"));
         } else {
           rc = ra / rb;
         }

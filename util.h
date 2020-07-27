@@ -17,4 +17,6 @@ String rightAndMiddleTrim(String value) {
   return value;
 }
 
+char temp[21];
+
 #endif

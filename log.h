@@ -5,7 +5,6 @@
 #include <ArduinoLog.h>
 
 inline String x4(unsigned i) {
-  char temp[5];
   sprintf(temp, "%4X", i);
   return temp;
 }

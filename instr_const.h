@@ -1,5 +1,3 @@
-// 00  "no_op  ", "STOP   ", "MOV_A  ", "MOV_B  ", "MOV_C  ", "MOV_VA ", "MOV_VB ", "MOV_VC ",
-// 08  "MOV_RA ", "MOV_RB ", "MOV_RC ", "MOVRRAB", "MOV_D_A", "MOV_T_A", "--     ", "--     ",
 const char _instr_00[] PROGMEM = "no_op  ";
 const char _instr_01[] PROGMEM = "STOP   ";
 const char _instr_02[] PROGMEM = "MOV_A  ";
@@ -17,8 +15,6 @@ const char _instr_0D[] PROGMEM = "MOV_T_A";
 const char _instr_0E[] PROGMEM = "--     ";
 const char _instr_0F[] PROGMEM = "--     ";
 
-// 10   "ADD    ", "MINUS  ", "MULT   ", "DIV    ", "A++    ", "B++    ", "C++    ", "A--    ",
-// 18   "B--    ", "C--    ", "INV_A  ", "INV_B  ", "INV_C  ", "--     ", "--     ", "--     ",
 const char _instr_10[] PROGMEM = "ADD    ";
 const char _instr_11[] PROGMEM = "MINUS  ";
 const char _instr_12[] PROGMEM = "MULT   ";
@@ -36,8 +32,6 @@ const char _instr_1D[] PROGMEM = "--     ";
 const char _instr_1E[] PROGMEM = "--     ";
 const char _instr_1F[] PROGMEM = "--     ";
 
-// 20   "LABEL  ", "JUMP   ", "JMP_A_Z", "JMP_B_Z", "JMP_C_Z", "JMP_A!Z_", "JMP_B!Z_", "JMP_C!Z_",
-// 28   "JMP_A=B_", "JMP_A!B_", "JMP_A=C_", "JMP_A!C_", "JMP_B=C_", "JMP_B!C", "JMP  RA", "JMP_ADA",
 const char _instr_20[] PROGMEM = "LABEL  ";
 const char _instr_21[] PROGMEM = "JUMP   ";
 const char _instr_22[] PROGMEM = "JMP_A_Z";
@@ -55,8 +49,6 @@ const char _instr_2D[] PROGMEM = "JMP_B!C";
 const char _instr_2E[] PROGMEM = "JMP_RA ";
 const char _instr_2F[] PROGMEM = "JMP_ADA";
 
-// 30   "JMP_SUB", "RETURN ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
-// 38   "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
 const char _instr_30[] PROGMEM = "JMP_SUB";
 const char _instr_31[] PROGMEM = "RETURN ";
 const char _instr_32[] PROGMEM = "--     ";
@@ -74,8 +66,6 @@ const char _instr_3D[] PROGMEM = "--     ";
 const char _instr_3E[] PROGMEM = "--     ";
 const char _instr_3F[] PROGMEM = "--     ";
 
-// 40   "SCR_ON ", "SCR_OFF", "SCR_CLR", "SCR_NL ", "INPUT_A", "INPUT_B", "INPUT_C", "INPUT_M",
-// 48   "PRT_A  ", "PRT_B  ", "PRT_C  ", "PRT_M  ", "PRTCH  ", "PRTCH_A", "PRTCH_M", "--     ",
 const char _instr_40[] PROGMEM = "SCR_ON ";
 const char _instr_41[] PROGMEM = "SCR_OFF";
 const char _instr_42[] PROGMEM = "SCR_CLR";
@@ -93,8 +83,6 @@ const char _instr_4D[] PROGMEM = "PRTCH_A";
 const char _instr_4E[] PROGMEM = "PRTCH_M";
 const char _instr_4F[] PROGMEM = "--     ";
 
-// 50   "SW_C_A ", "SW_C_B ", "SW_A_B ", "LSHIFT ", "RSHIFT ", "AND    ", "OR     ", "RND    ",
-// 58   "RND_A  ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
 const char _instr_50[] PROGMEM = "SW_C_A ";
 const char _instr_51[] PROGMEM = "SW_C_B ";
 const char _instr_52[] PROGMEM = "SW_A_B ";
@@ -112,8 +100,6 @@ const char _instr_5D[] PROGMEM = "--     ";
 const char _instr_5E[] PROGMEM = "--     ";
 const char _instr_5F[] PROGMEM = "--     ";
 
-// 60   "ST_INIT", "PUSH_A ", "PUSH_B ", "PUSH_C ", "PUSH_M ", "POP_A  ", "POP_B  ", "POP_C  ",
-// 68   "POP_M  ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ", "--     ",
 const char _instr_60[] PROGMEM = "ST_INIT";
 const char _instr_61[] PROGMEM = "PUSH_A ";
 const char _instr_62[] PROGMEM = "PUSH_B ";
@@ -131,7 +117,6 @@ const char _instr_6D[] PROGMEM = "--     ";
 const char _instr_6E[] PROGMEM = "--     ";
 const char _instr_6F[] PROGMEM = "--     ";
 
-// 70   "SLEEP  ", "SLEEP_A", "PINMOUT", "PMODINP", "DREAD  ", "DWRITE ", "AREAD  ", "AWRITE ",
 const char _instr_70[] PROGMEM = "SLEEP  ";
 const char _instr_71[] PROGMEM = "SLEEP_A";
 const char _instr_72[] PROGMEM = "PINMOUT";
