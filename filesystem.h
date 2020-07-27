@@ -50,22 +50,22 @@ public:
   void saveCurrent() {
     if (!isOk)
       return;
-    Log.trace(F("Save current program starting..." CR));
+    Log.notice(F("Save current program starting..." CR));
     SD.remove(CURRENT_PRGM);
 
     File file = SD.open(CURRENT_PRGM, FILE_WRITE);
-    unsigned last = program->lastInstrIndex();
-    for (unsigned index = 0; index < last; index++) {
+    unsigned last = program->lastInstrIndex()+1;
+    for (unsigned index = 0; index <= last; index++) {
       Instr instr = program->getInstr(index);
       file.println(instr.getForFile());
-      Log.trace(F("  %i : %s" CR), index, instr.getForFile().c_str());
+      Log.verbose(F("  %i : %s" CR), index, instr.getForFile().c_str());
     }
     file.close();
-    Log.trace(F("Save current program end" CR));
+    Log.notice(F("Save current program end : %i lines" CR), last);
   }
 
   void enter() {
-    Log.trace(F("File mode starting..." CR));
+    Log.notice(F("ENTER IN FILE MODE..." CR));
     displayFiles();
     while(true) {
       char key = keypad.getKey();
@@ -146,7 +146,7 @@ private:
         break;
       }
     }
-    Log.trace(F("Copy %s -> %s" CR), current.name(), name.c_str());
+    Log.trace(F("Copy '%s' -> '%s'" CR), current.name(), name.c_str());
     lcd->displaySingleMessage(F("COPYING"), F("Copy in process..."));
     File target = SD.open(name, FILE_WRITE);
     while(current.available()) {
@@ -164,13 +164,14 @@ private:
       current.close();
       return;
     }
+    // TODO
     current.close();
   }
 
   void load() { read(currentIndex); }
 
   void displayFiles() {
-    Log.trace(F("displayFiles. currentIndex:%i" CR), currentIndex);
+    Log.verbose(F("displayFiles. currentIndex:%i" CR), currentIndex);
     lcd->initDisplay();
     lcd->setCursor(0, 0);
     for (unsigned i = 0; i < 4; i++) {
@@ -185,7 +186,7 @@ private:
   }
 
   void displayOneFile(File file, unsigned index) {
-    Log.trace(F("displayOneFile(%s, %i)" CR), file.name(), index);
+    Log.verbose(F("displayOneFile(%s, %i)" CR), file.name(), index);
     sprintf(lcd->line, "%s %s", (index == 0 ? "#" : " "), file.name());
     String line(lcd->line);
     lcd->setLine(index, line);
@@ -200,7 +201,7 @@ private:
       index++;
       file.close();
     }
-    Log.trace(F("getProgramNbr() -> %i" CR), index);
+    Log.verbose(F("getProgramNbr() -> %i" CR), index);
     return index;
   }
 
@@ -215,13 +216,13 @@ private:
     while(true) {
       file =  root.openNextFile();
       if (!file) {
-        Log.trace(F("GetProgramAt(%i) -> Not found" CR), index);
+        Log.verbose(F("GetProgramAt(%i) -> Not found" CR), index);
         root.close();
         return file;
       }
       if (isValidProgramName(file.name())) {
         if (i == index) {
-          Log.trace(F("GetProgramAt(%i) -> '%s'" CR), index, file.name());
+          Log.verbose(F("GetProgramAt(%i) -> '%s'" CR), index, file.name());
           root.close();
           return file;
         } else {
@@ -269,7 +270,7 @@ private:
     while (file.available()) {
       String line = readLine(file);
       if (line.length() < 4)
-        break;
+        continue;
       Instr instr = createInstrFromFile(line);
       Log.trace(F("  %i : '%s' --> '%s'" CR), index, line.c_str(), instr.getForFile().c_str());
       program->setInstr(instr, index);
@@ -281,17 +282,16 @@ private:
   }
 
   String readLine(File file) {
-    char line[15];
+    String line = "";
     uint8_t i = 0;
     while (file.available() && i < 14) {
       char c = file.read();
-      if (c == '\n')
+      if (c == '\n' || c == '#')
         break;
-      line[i++] = c;
+      line += c;
     }
-    line[i + 1] = '\0';   
-    Log.verbose(F("Read line '%s'" CR), line);
-    return String(line);
+    Log.verbose(F("  Read line '%s'" CR), line.c_str());
+    return line;
   }
 
   bool isOk = true;

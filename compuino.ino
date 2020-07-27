@@ -1,3 +1,4 @@
+#include "util.h"
 #include "engine.h"
 
 Engine* engine;
@@ -21,6 +22,14 @@ void setup() {
   #ifdef MEMORY_FREE_H
     Log.notice(F("Free memory in Arduino : %u" CR), freeMemory());
   #endif
+  Instr instr(0x42, 0);
+  String line = "SCR_CLR";
+  if (rightTrim(instr.getActionAsStr()).equals(line)) {
+    Log.trace("ça marche pourtant" CR);
+  } else {
+    Log.trace("ça marche pas '%s' '%s' " CR, line.c_str(), rightTrim(instr.getActionAsStr()).c_str() );
+  }
+
 };
 
 void loop() {
