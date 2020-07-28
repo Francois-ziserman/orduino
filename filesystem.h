@@ -79,6 +79,9 @@ public:
           rename();
           displayFiles();
           break;
+        case KEY_DUMP_PRG_TO_SERIAL:
+          dumpToSerial();
+          break;
         case KEY_FILE_LOAD:
           load();
           return;
@@ -163,16 +166,55 @@ private:
   void rename() {
     File current = getProgramAt(currentIndex);
     if (String(current.name()) == String(F("CURRENT.CAR"))) {
-      lcd->displaySingleMessageWithValidate(F("ERROR"), F("can't delete CURRENT"));
+      lcd->displaySingleMessageWithValidate(F("ERROR"), F("can't rename CURRENT"));
       current.close();
       return;
     }
-    // TODO
-    current.close();
+    sprintf(temp, "RENAME:%s", current.name());
+    String name = getFileName(String(temp), F("New   :"));
+    if (name.length() > 0) {
+      name += ".CAR";
+      File f = getProgramByName(name);
+      if (f) {
+        lcd->displaySingleMessageWithValidate(F("ERROR"), F("rename already existss"));
+        current.close();
+        f.close();
+        return;  
+      }
+      File target = SD.open("/PRGM/" + name, FILE_WRITE);
+      lcd->displaySingleMessage(F("RENAMING"), F("Rename in process..."));
+      while(current.available()) {
+        target.write(current.read());
+      }
+      name = current.name();
+      current.close();
+      target.close();
+      SD.remove("/PRGM/" + name);
+    }
   }
 
   void load() { 
     read(currentIndex); 
+  }
+  
+  void dumpToSerial() {
+    File file = getProgramAt(currentIndex);
+    unsigned index = 0;
+    Log.notice(F("PROGRAM LISTING : %s" CR), file.name());
+    while (file.available()) {
+      String line = readLine(file);
+      if (line.length() < 4)
+        continue;
+      Instr instr = createInstrFromFile(line);
+      if (instr.action == 0) {
+        Log.trace(F("  %i : no_op #'%s'" CR), index, line.c_str());
+      } else {
+        Log.trace(F("  %i : %s" CR), index, instr.getForFile().c_str());
+      }
+      index++;
+    }
+    file.close();
+    Log.notice(F("PROGRAM LISTING COMPLETE" CR));
   }
 
   void displayFiles() {
@@ -237,6 +279,30 @@ private:
     }
   }
 
+  File getProgramByName(String name) {
+    File root = SD.open(F("/PRGM"));
+    if (!root) {
+      Log.error(F("GetProgramByName(%s) -> error in root" CR), name.c_str());
+      return root;
+    }
+    unsigned i = 0;
+    File file;
+    while(true) {
+      file =  root.openNextFile();
+      if (!file) {
+        Log.verbose(F("GetProgramByName(%s) -> Not found" CR), name.c_str());
+        root.close();
+        return file;
+      }
+      if (name.equals(file.name())) {
+        Log.verbose(F("GetProgramByName(%s) -> found" CR), name.c_str());
+        root.close();
+        return file;
+      }
+      file.close();
+    }
+  }
+
   bool isValidProgramName(String name) {
     if (name.indexOf(".CAR") < 0) {
       return false;
@@ -249,13 +315,14 @@ private:
         continue;
       if (c >= '0' && c <= '9')
         continue;
+      if (c == '_' || c == '-')
+        continue;
       Log.verbose(F("isValidProgramName(%s) -> false" CR), name.c_str());
       return false;
     }
     Log.verbose(F("isValidProgramName(%s) -> true" CR), name.c_str());
     return true;
   }
-
 
   void read(unsigned fileIndex) {
     if (!isOk)
@@ -288,14 +355,66 @@ private:
   String readLine(File file) {
     String line = "";
     uint8_t i = 0;
+    bool inComment = false;
     while (file.available() && i < 14) {
       char c = file.read();
-      if (c == '\n' || c == '#')
+      if (c == '\n')
         break;
-      line += c;
+      if (c == '#') 
+          inComment = true;
+      if (!inComment)
+        line += c;
     }
     Log.verbose(F("  Read line '%s'" CR), line.c_str());
     return line;
+  }
+
+  String getFileName(String title, String message) {
+    lcd->initDisplay();
+    lcd->setCursor(0, 0);
+    lcd->setLine(0, title);
+    lcd->setLine(1, message);
+    lcd->display();
+    String ret = "";
+    String sinput = "";
+    unsigned pos = message.length();
+    unsigned i;
+    lcd->setCursor(pos, 1);
+    while (true) {
+      lcd->refreshCursor();
+      char k = keypad.getKey();
+      if (k == KEY_ENTER) {
+        return ret;
+      }
+      if (k == KEY_SWITCH_MODE || k == KEY_RUN_STOP) {
+        return "";
+      }
+      if (k == KEY_LEFT && ret.length() > 0) {
+        ret = ret.substring(0, ret.length()-1);
+        pos--;
+        lcd->setLine(1, message + ret);
+        lcd->setCursor(pos, 1);
+        lcd->display();
+      } else if (k >= KEY_HEX_0 && k <= KEY_HEX_F) {
+        sinput+= k;
+        Log.trace(F("input: '%s'" CR), sinput.c_str());
+        if (sinput.length() == 2) {
+          char c = getCharToInt(sinput[0]) * 16 + getCharToInt(sinput[1]);
+          if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_' || c == '-') {
+            ret += c;
+            Log.trace(F("add char '%c' --> '%s'" CR), c, ret.c_str());
+            lcd->setLine(1, message + ret);
+            pos++;
+            lcd->setCursor(pos, 1);
+            lcd->display();
+            sinput = "";
+          } else {
+            sinput = "";
+          }
+        }
+      }
+    }
+    return ret;
   }
 
   bool isOk = true;

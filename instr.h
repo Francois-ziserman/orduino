@@ -76,7 +76,7 @@ byte getActionFromStr(String line) {
 
 String splitLeft(String value) {
   String ret = "";
-  byte i = 0;
+  int i = 0;
   // Go to first char
   for (; i < value.length(); i++) {
     if (value[i] != ' ')
@@ -84,7 +84,7 @@ String splitLeft(String value) {
   }
   // value[i] != ' '
   for (; i < value.length(); i++) {
-    if (value[i] == ' ' && i > 4 )
+    if (value[i] == ' ' && i >= 2 )
       break;
     ret += value[i];
   }

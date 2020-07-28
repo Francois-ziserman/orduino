@@ -67,43 +67,6 @@ public:
         return;
   }
 
-  String getFileName(String title, String message) {
-    initDisplay();
-    setCursor(0, 0);
-    setLine(0, title);
-    setLine(1, message);
-    display();
-    String ret = "";
-    String sinput = "";
-    unsigned pos = message.length() + 1;
-    unsigned i;
-    setCursor(1, pos);
-    while (true) {
-      //refreshCursor();
-      char k = keypad.getKey();
-      if (k == KEY_ENTER) {
-        break;
-      }
-      if (k >= KEY_HEX_0 && k <= KEY_HEX_F) {
-        sinput+= k;
-        Log.trace(F("input: '%s'" CR), sinput.c_str());
-        if (sinput.length() == 2) {
-          char c = getCharToInt(sinput[0]) * 16 + getCharToInt(sinput[1]);
-          if (c >= 'A' && c <= 'Z') {
-            ret += c;
-            Log.trace(F("add char '%c' --> '%s'" CR), c, ret.c_str());
-            //setChar(1, pos, c);
-            sinput = "";
-            pos++;
-          } else {
-            sinput = "";
-          }
-        }
-      }
-    }
-    return ret;
-  }
-
   void display() {
     Log.verbose(F("Lcd.diaplay" CR));
     for(short i = 0; i < 4; i++) {
