@@ -61,6 +61,10 @@ private:
 
 byte getActionFromStr(String line) {
   line = rightTrim(line);
+
+  if (line.length() < 2)
+    return 0;
+  
   if (line.length() > 7)
     line = line.substring(0, 7);
   

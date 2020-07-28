@@ -10,8 +10,8 @@ const char _instr_08[] PROGMEM = "MOV_RA ";
 const char _instr_09[] PROGMEM = "MOV_RB ";
 const char _instr_0A[] PROGMEM = "MOV_RC ";
 const char _instr_0B[] PROGMEM = "MOVRRAB";
-const char _instr_0C[] PROGMEM = "MOV_D_A";
-const char _instr_0D[] PROGMEM = "MOV_T_A";
+const char _instr_0C[] PROGMEM = "MOV_DT ";
+const char _instr_0D[] PROGMEM = "MOV_TM ";
 const char _instr_0E[] PROGMEM = "--     ";
 const char _instr_0F[] PROGMEM = "--     ";
 

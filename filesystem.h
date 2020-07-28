@@ -202,15 +202,13 @@ private:
     unsigned index = 0;
     Log.notice(F("PROGRAM LISTING : %s" CR), file.name());
     while (file.available()) {
-      String line = readLine(file);
-      if (line.length() < 4)
+      String line;
+      String comment; 
+      readLine(file, line, comment);
+      if (line.length() < 4 && comment.length() < 2)
         continue;
       Instr instr = createInstrFromFile(line);
-      if (instr.action == 0) {
-        Log.trace(F("  %i : no_op #'%s'" CR), index, line.c_str());
-      } else {
-        Log.trace(F("  %i : %s" CR), index, instr.getForFile().c_str());
-      }
+      Log.trace(F("  %i : %s %s" CR), index, (instr.action == 0 ? "" : instr.getForFile().c_str()), comment.c_str());
       index++;
     }
     file.close();
@@ -338,12 +336,14 @@ private:
 
     program->eraseProgram();
     unsigned index = 0;
+    String line;
+    String comment;
     while (file.available()) {
-      String line = readLine(file);
+      readLine(file, line, comment);
       if (line.length() < 4)
         continue;
       Instr instr = createInstrFromFile(line);
-      Log.trace(F("  %i : '%s' --> '%s'" CR), index, line.c_str(), instr.getForFile().c_str());
+      Log.trace(F("  %i : %s %s -> %s" CR), index, line.c_str(), comment.c_str(), instr.getForFile().c_str());
       program->setInstr(instr, index);
       index++;
     }
@@ -352,8 +352,9 @@ private:
     Log.trace(F("Reading file '%s' End" CR), file.name());
   }
 
-  String readLine(File file) {
-    String line = "";
+  void readLine(File file, String& line, String& comment) {
+    line = "";
+    comment = "";
     uint8_t i = 0;
     bool inComment = false;
     while (file.available() && i < 14) {
@@ -362,11 +363,12 @@ private:
         break;
       if (c == '#') 
           inComment = true;
-      if (!inComment)
+      if (inComment)
+        comment += c;
+      else
         line += c;
     }
     Log.verbose(F("  Read line '%s'" CR), line.c_str());
-    return line;
   }
 
   String getFileName(String title, String message) {
@@ -393,20 +395,20 @@ private:
         ret = ret.substring(0, ret.length()-1);
         pos--;
         lcd->setLine(1, message + ret);
-        lcd->setCursor(pos, 1);
         lcd->display();
+        lcd->setCursor(pos, 1);
       } else if (k >= KEY_HEX_0 && k <= KEY_HEX_F) {
         sinput+= k;
-        Log.trace(F("input: '%s'" CR), sinput.c_str());
+        Log.verbose(F("input: '%s'" CR), sinput.c_str());
         if (sinput.length() == 2) {
           char c = getCharToInt(sinput[0]) * 16 + getCharToInt(sinput[1]);
           if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_' || c == '-') {
             ret += c;
-            Log.trace(F("add char '%c' --> '%s'" CR), c, ret.c_str());
+            Log.verbose(F("add char '%c' --> '%s'" CR), c, ret.c_str());
             lcd->setLine(1, message + ret);
+            lcd->display();
             pos++;
             lcd->setCursor(pos, 1);
-            lcd->display();
             sinput = "";
           } else {
             sinput = "";
