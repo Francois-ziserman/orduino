@@ -7,7 +7,7 @@
 
 class Input {
 public:
-  Input(Screen* s, String n) {
+  Input(Screen* s, String& n) {
     screen = s;
     name = n;
   }
@@ -48,7 +48,7 @@ public:
   }
 private:
   Screen* screen;
-  String name;
+  String& name;
 };
 
 #endif
