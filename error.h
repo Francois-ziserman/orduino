@@ -9,11 +9,10 @@ public:
     init();
   }
 
-  void setOn(String r, unsigned value) {
+  void setOn(String reason, unsigned value) {
     on = true;
-    char m[20];
-    sprintf(m, r.c_str(), value);
-    setOn(m);
+    sprintf(temp, reason.c_str(), value);
+    setOn(temp);
   }
 
   void setOn(String r) {

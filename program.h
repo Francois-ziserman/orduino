@@ -79,14 +79,7 @@ public:
       }
       break;
     case KEY_RESET:
-      Log.notice(F("RESET" CR));
-      isRunning = false;
-      setScreenMode(false);
-      indexExec = 0;
-      initRegisters();
-      error->init();
-      instructions->compile();
-      eraseRam();
+      reset();
       updateDisplay(); 
       break;
     case KEY_LINE_UP:
@@ -235,7 +228,7 @@ public:
         update = true;
         break;
       case I_SWITCH_C_A:
-        switchValues( rc, ra);
+        switchValues( &rc, &ra);
         update = true;
         break;
       case I_SWITCH_C_B:
@@ -303,6 +296,48 @@ public:
         indexExec = instructions->getLabelAddress(instr.parameter);
         update = true;
         break;
+      case I_JUMP_SUB_AZ:
+        if (ra <= 0) {
+          stack->subPush(indexExec);
+          indexExec = instructions->getLabelAddress(instr.parameter);
+          update = true;
+        }
+        break;
+      case I_JUMP_SUB_BZ:
+        if (rb <= 0) {
+          stack->subPush(indexExec);
+          indexExec = instructions->getLabelAddress(instr.parameter);
+          update = true;
+        }
+        break;
+      case I_JUMP_SUB_CZ:
+        if (rc <= 0) {
+          stack->subPush(indexExec);
+          indexExec = instructions->getLabelAddress(instr.parameter);
+          update = true;
+        }
+        break;
+      case I_JUMP_SUB_ANZ:
+        if (ra != 0) {
+          stack->subPush(indexExec);
+          indexExec = instructions->getLabelAddress(instr.parameter);
+          update = true;
+        }
+        break;
+      case I_JUMP_SUB_BNZ:
+        if (rb != 0) {
+          stack->subPush(indexExec);
+          indexExec = instructions->getLabelAddress(instr.parameter);
+          update = true;
+        }
+        break;
+      case I_JUMP_SUB_CNZ:
+        if (rc != 0) {
+          stack->subPush(indexExec);
+          indexExec = instructions->getLabelAddress(instr.parameter);
+          update = true;
+        }
+        break;
       case I_RETURN:
         indexExec = stack->subPop();
         update = true;
@@ -329,24 +364,24 @@ public:
         update = true;
         break;
       case I_JAZ:
-        if (ra == 0) {
+        if (ra <= 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace(F("  --> JAZ %s %s" CR), (ra == 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JAZ %s %s" CR), (ra <= 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JBZ:
-        if (rb == 0) {
+        if (rb <= 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace(F("  --> JBZ %s %s" CR), (rb == 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JBZ %s %s" CR), (rb <= 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JCZ:
-        if (rc == 0) {
+        if (rc <= 0) {
           indexExec = instructions->getLabelAddress(instr.parameter);
         }
-        Log.trace(F("  --> JCZ %s %s" CR), (rc == 0 ? "jmp" : "nop"), X4(indexExec+1));
+        Log.trace(F("  --> JCZ %s %s" CR), (rc <= 0 ? "jmp" : "nop"), X4(indexExec+1));
         update = true;
         break;
       case I_JANZ:
@@ -565,6 +600,16 @@ public:
       Log.notice(F("STOP" CR));
       isRunning = false;
     }
+  }
+
+  void reset() {
+    Log.notice(F("RESET PROGRAM" CR));
+    setScreenMode(false);
+    indexExec = 0;
+    initRegisters();
+    error->init();
+    instructions->compile();
+    eraseRam();
   }
 
   void eraseProgram() { instructions->erase(); }

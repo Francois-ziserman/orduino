@@ -50,8 +50,15 @@
 #define I_JNEQ_BC               0x2D
 #define I_JUMP_RB               0x2E
 #define I_JUMP_ADR_RB           0x2F
+
 #define I_JUMP_SUB              0x30
 #define I_RETURN                0x31
+#define I_JUMP_SUB_AZ           0x32
+#define I_JUMP_SUB_BZ           0x33
+#define I_JUMP_SUB_CZ           0x34
+#define I_JUMP_SUB_ANZ          0x35
+#define I_JUMP_SUB_BNZ          0x36
+#define I_JUMP_SUB_CNZ          0x37
 
 // SCREEN
 

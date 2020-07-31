@@ -9,7 +9,7 @@
 
 #define PIN_CS 53
 
-#define CURRENT_PRGM F("PRGM/CURRENT.CAR")
+#define CURRENT_PRGM F("/PRGM/CURRENT.CAR")
 
 // call back for file timestamps
 void dateTime(uint16_t* date, uint16_t* time) {
@@ -195,6 +195,7 @@ private:
 
   void load() { 
     read(currentIndex); 
+    program->reset();
   }
   
   void dumpToSerial() {

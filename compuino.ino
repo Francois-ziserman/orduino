@@ -14,7 +14,7 @@ Engine* engine;
 */
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   randomSeed(analogRead(0));
   Log.begin(LOG_LEVEL_TRACE, &Serial);
   Log.trace(F("Starting..." CR));

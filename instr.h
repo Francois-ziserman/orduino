@@ -64,7 +64,7 @@ byte getActionFromStr(String line) {
 
   if (line.length() < 2)
     return 0;
-  
+
   if (line.length() > 7)
     line = line.substring(0, 7);
   
@@ -78,7 +78,7 @@ byte getActionFromStr(String line) {
   return 0;
 }
 
-String splitLeft(String value) {
+String splitLeft(String& value) {
   String ret = "";
   int i = 0;
   // Go to first char
