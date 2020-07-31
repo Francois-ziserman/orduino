@@ -13,6 +13,7 @@
 
 #define LABELS_SIZE   64
 #define PAGE 3
+#define FILE_NBR 0xF
 
 #define GETRAMX(index) x4(index < RAM_SIZE ? ram->getAt(index) : 0).c_str()
 
@@ -588,6 +589,49 @@ public:
         analogWrite(ra, rb);
         update = true;
         break;
+      case I_F_OPEN_R:
+        if (rb >= FILE_NBR) { 
+          error->setOn(F("File idx too big"));
+        } else {
+          sprintf(temp, "/DATA/%04X.dat", ra);
+          files[rb] = SD.open(temp, FILE_READ);
+          update = true;
+        }
+        break;
+      case I_F_OPEN_W:
+        if (rb >= FILE_NBR) { 
+          error->setOn(F("File idx too big"));
+        } else {
+          sprintf(temp, "/DATA/%04X.dat", ra);
+          files[rb] = SD.open(temp, FILE_WRITE);
+          update = true;
+        }
+        break;
+      case I_F_REMOVE:
+        sprintf(temp, "/DATA/%04X", ra);
+        SD.remove(temp);
+        update = true;
+        break;
+      case I_F_CLOSE:
+        if (rb >= FILE_NBR) { 
+          error->setOn(F("File idx too big"));
+        } else {
+          files[rb].close();
+          update = true;
+        }
+        break;
+      case I_F_READ:
+        ra = files[rb].read();
+        update = true;
+        break;
+      case I_F_WRITE:
+        files[rb].write(ra);
+        update = true;
+        break;
+      case I_F_AVAILABLE:
+        rc = files[rb].available();
+        update = true;
+        break;
     }
     if (error->isOn()) 
       isRunning = false;         
@@ -758,7 +802,7 @@ private:
   void initRegisters() {
     ra = 0;
     rb = 0;
-    rc = 0;    
+    rc = 0; 
   }
 
   bool isRunning;
@@ -774,6 +818,7 @@ private:
   Error* error;
   Clock* clock;
   Instructions* instructions;
+  File files[FILE_NBR];
 };
 
 #endif

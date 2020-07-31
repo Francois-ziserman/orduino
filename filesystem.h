@@ -107,6 +107,10 @@ private:
       Log.notice(F("SD : PRGM default dir doesn't exist --> create it" CR));
       SD.mkdir(F("PRGM"));
     }    
+    if (!SD.exists(F("DATA"))) {
+      Log.notice(F("SD : DATA default dir doesn't exist --> create it" CR));
+      SD.mkdir(F("DATA"));
+    }    
   }
 
   void lineUp() {

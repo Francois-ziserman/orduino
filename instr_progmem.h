@@ -23,6 +23,9 @@ const char* const INSTR[] PROGMEM = {
   _instr_70, _instr_71, _instr_72, _instr_73, _instr_74, _instr_75, _instr_76, _instr_77,
   _instr_78, _instr_79, _instr_7A, _instr_7B, _instr_7C, _instr_7D, _instr_7E, _instr_7F,
 
+  _instr_80, _instr_81, _instr_82, _instr_83, _instr_84, _instr_85, _instr_86, _instr_87,
+  _instr_88, _instr_89, _instr_8A, _instr_8B, _instr_8C, _instr_8D, _instr_8E, _instr_8F,
+
 };
 
 const static bool WITH_PARAM[] PROGMEM = {
@@ -51,5 +54,8 @@ const static bool WITH_PARAM[] PROGMEM = {
 
 /* 70 */  1, 1, 1, 1, 0, 0, 0, 0,
 /* 78 */  0, 0, 0, 0, 0, 0, 0, 0,
+
+/* 80 */  0, 0, 0, 0, 0, 0, 0, 0,
+/* 88 */  0, 0, 0, 0, 0, 0, 0, 0,
 
 };

@@ -119,5 +119,12 @@
 #define I_DT_PRINT_TIME         0x78
 #define I_DT_PRINT_DATE         0x79
 
+#define I_F_OPEN_R              0x80 // Open the file with the ID in RA, the file is in RB
+#define I_F_OPEN_W              0x81 
+#define I_F_CLOSE               0x82 // Close the file RB
+#define I_F_READ                0x83 // Read a character & put it in RA
+#define I_F_WRITE               0x84 // Write a character in RA
+#define I_F_AVAILABLE           0x85 // is there any more things to read ?
+#define I_F_REMOVE              0x86 // delete a file
 
-#define I_LAST                  0x80
+#define I_LAST                  0x87
