@@ -17,18 +17,16 @@ public:
     screen->print(temp);
     String sinput = "";
     int index = 0;
-    bool inputMode = true;
     screen->setCursor();
-    while (inputMode) {
+    while (true) {
       char key = keypad.getKey();
-        screen->refreshCursor();
+      if (key == KEY_ENTER) {
+        break;
+      } 
+      screen->refreshCursor();
       if (key == NO_KEY) {
         continue;
       }
-      if (key == KEY_ENTER) {
-        inputMode = false;
-        break;
-      } 
       if (key >= KEY_HEX_0 && key <= KEY_HEX_9) {
         sinput+= key;
         screen->printC(key, true);
